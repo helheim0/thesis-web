@@ -1,8 +1,8 @@
 {
-  "homepage": "http://helheim0.github.io/thesis-web",
+  "homepage": "http://helheim0.github.io/thesis-web/",
   "name": "thesis-web-version",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
   "dependencies": {
     "@ionic/react": "^6.7.0",
     "@reacticons/ionicons": "^7.0.1",
@@ -26,8 +26,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "predeploy" : "npm run build",
-    "deploy" : "gh-pages -d build"
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
