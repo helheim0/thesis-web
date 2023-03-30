@@ -2,7 +2,7 @@
   "homepage": "http://helheim0.github.io/",
   "name": "thesis-web-version",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
   "dependencies": {
     "@ionic/react": "^6.7.0",
     "@reacticons/ionicons": "^7.0.1",
