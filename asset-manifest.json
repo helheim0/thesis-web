@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/thesis-web/static/css/main.521dab9b.css",
-    "main.js": "/thesis-web/static/js/main.c5dbff20.js",
-    "static/js/988.188a1c20.chunk.js": "/thesis-web/static/js/988.188a1c20.chunk.js",
-    "index.html": "/thesis-web/index.html",
-    "main.521dab9b.css.map": "/thesis-web/static/css/main.521dab9b.css.map",
-    "main.c5dbff20.js.map": "/thesis-web/static/js/main.c5dbff20.js.map",
-    "988.188a1c20.chunk.js.map": "/thesis-web/static/js/988.188a1c20.chunk.js.map"
+    "main.css": "./static/css/main.521dab9b.css",
+    "main.js": "./static/js/main.d764c4df.js",
+    "static/js/988.188a1c20.chunk.js": "./static/js/988.188a1c20.chunk.js",
+    "index.html": "./index.html",
+    "main.521dab9b.css.map": "./static/css/main.521dab9b.css.map",
+    "main.d764c4df.js.map": "./static/js/main.d764c4df.js.map",
+    "988.188a1c20.chunk.js.map": "./static/js/988.188a1c20.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.521dab9b.css",
-    "static/js/main.c5dbff20.js"
+    "static/js/main.d764c4df.js"
   ]
 }
