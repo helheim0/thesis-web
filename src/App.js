@@ -16,7 +16,7 @@ import SetGoal from './pages/SetGoal';
 import GoalList from './pages/GoalList';
 import Login from './pages/Login';
 import { AuthProvider } from './Auth';
-import { BrowserRouter as Router} from 'react-router-dom';
+import { HashRouter  as Router} from 'react-router-dom';
 import PrivateRoute from './PrivateRoute';
 
 const App = () => {
