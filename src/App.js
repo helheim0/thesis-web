@@ -22,7 +22,7 @@ import PrivateRoute from './PrivateRoute';
 const App = () => {
   return (
     <AuthProvider>
-      <Router>
+      <Router basename={window.location.pathname || ''}>
         <div>
           <PrivateRoute exact path="/" component={Home} />
           <Route exact path="/login" component={Login} />
