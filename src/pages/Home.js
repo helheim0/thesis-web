@@ -1,29 +1,62 @@
+import React, { useState, useEffect } from "react";
 import Currency from "../components/Currency";
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import { CircularProgressbarWithChildren } from 'react-circular-progressbar';
 import "../styles.css";
-import {
-    BrowserRouter,
-    Routes, //replaces "Switch" used till v5
-    Route,
-  } from "react-router-dom";
-  import { Link } from "react-router-dom";
+import {   BrowserRouter, Routes } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Track from "./Track";
 import app from '../firebaseConfig';
+import GoalList from "./GoalList";
+import { collection, query, where, onSnapshot } from "firebase/firestore";
+import {db} from '../firebaseConfig';
+import { doc, getDocs, getFirestore  } from "firebase/firestore";
+import firebase from 'firebase/compat/app';
 
 export default function Home() { 
     const hasTracked = false;
     const date = new Date();
-    const today = date.getDate() + "."+ date.getMonth()+1;
+    const today = ". " +  date.getDate()  ;
+    const month = date.getMonth() + 1;
+    const  [hasGoal, setHasGoal] = useState(false);
+    const [goal, setGoal] = useState("");
+    let user = firebase.auth().currentUser;
+    var userEmail = user.email;
+    let userName = userEmail.match(/^([^@]*)@/)[1];
+    let userId = user.id;
+
+    useEffect(() => {
+        const fetchPost = async () => {
+          
+          const q = query(collection(db, "users"), where("id", "==", userId));
+    
+          const querySnapshot = await getDocs(q);
+    
+          const userData = querySnapshot.docs[0]?.data(); //getting the only user data
+    
+          if (userData.hasOwnProperty("goal") && userData.goal !== "") {
+            const goal = userData.goal;
+            setGoal(goal); //if goal exists and not empty set current goal
+          } else {
+            setGoal(""); //if goal not exists or empty set current goal as ""
+          }
+        };
+    
+        fetchPost();
+      }, []);
+
 
     return (
-        <div className="cont">
-            <div style={container}>
+        <div >
+            <button onClick={() => app.auth().signOut()}>Sign out</button>
+            <h1> hello {userName}</h1>
+            {
+                 goal.length > 0 ?  (<div><div style={container}>
                 <Currency />
             </div>
-            <div style={{padding: '4rem'}}>
-                <h1 className="headerText">Current goal: veganuary</h1>
+            <div style={{padding: '4rem', display: 'flex', flexDirection:'column', alignItems:'center', justifyContent:'space-evenly'}}>
+                <h1 className="headerText">Current goal: {goal}</h1>
                 <div style={{ width: 200, height: 200, margin: '0 auto' }}>
                     {
                         hasTracked ?
@@ -36,7 +69,9 @@ export default function Home() {
                         trailColor: '#d6d6d6',
                         backgroundColor: '#3e98c7', }}>
                         <div style={{fontSize: 40, fontWeight: "bold"}}>
-                            {today}
+                        {
+                                month < 10 ? "0" + month : month
+                            } {today}
                         </div>
                      </CircularProgressbarWithChildren>
 
@@ -51,7 +86,9 @@ export default function Home() {
                         trailColor: '#d6d6d6',
                         backgroundColor: '#3e98c7',}}>
                         <div style={{fontSize: 40, fontWeight: "bold"}}>
-                            {today}
+                        {
+                                month < 10 ? "0" + month : month
+                            } {today}
                         </div>
                  </CircularProgressbarWithChildren>
         }
@@ -66,11 +103,21 @@ export default function Home() {
             </Link >
         }
             </div>
-            <div>
+            <div style={{ display: 'flex', flexDirection:'column', alignItems:'center', justifyContent:'center'}}>
                 <h1 className="headerText">Random daily fact</h1>
                 <p>Livestock is responsible for 18% of greenhouse gases.</p>
             </div>
-            <button onClick={() => app.auth().signOut()}>Sign out</button>
+            <button onClick={() => app.auth().signOut()}>Sign out</button></div>
+            ) : (<div style={{display: 'flex', flexDirection:'column', alignItems: 'center', justifyContent: 'center', marginTop: '15%'}}>
+            <div style={{display: 'flex', flexDirection:'column', alignItems: 'center', justifyContent: 'center'}}>
+              <h1 className='headerText'>You have not set a goal yet.</h1>
+              <Link style={styles.button} to="/goallist" element={GoalList}> 
+                    Set goal
+              </Link >
+            </div>
+        </div>) 
+            }
+            
         </div>
     );
 }

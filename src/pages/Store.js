@@ -1,7 +1,37 @@
+import React, { useState, useEffect } from "react";
 import StoreItem from '../components/StoreItem';
 import { IoLockClosed } from "react-icons/io5";
+import { IoFastFood } from "react-icons/io5";
+import firebase from 'firebase/compat/app';
+import { collection, query, where, onSnapshot } from "firebase/firestore";
+import {db} from '../firebaseConfig';
+import { doc, getDocs, getFirestore  } from "firebase/firestore";
 
 export default function Store() {
+    let user = firebase.auth().currentUser;
+    let userCurrency = user.currency;
+
+    const [recipes, setRecipes] = useState([]);
+
+    const fetchPost = async () => {
+       
+        await getDocs(collection(db, "recipes"))
+            .then((querySnapshot)=>{               
+                const newData = querySnapshot.docs
+                    .map((doc) => ({...doc.data(), id:doc.id }));
+                    setRecipes(newData);                
+                console.log(recipes, newData);
+            })
+       
+    }
+    useEffect(() => {
+        fetchPost();
+
+      }, []);
+
+    const unlock = () => {
+
+    }
 
     return (
         <div className='cont'>
@@ -9,9 +39,13 @@ export default function Store() {
                 <h1 className='headerText'>Recipes</h1>
                 <div >
                     <div style={styles.recipesContainer}>  
-                            <StoreItem  name="Salad" price="50"/>
-                            <StoreItem name="Salad" price="50" isLocked = "false"/>
-                    </div>
+                    {
+                        recipes?.map((recipe,i)=>(
+                            <div>
+                                <StoreItem name={recipe.name} price={recipe.cost} isLocked = {recipe.isLocked}/>
+                        </div>
+                        ))
+                    } </div>
                 </div>
             </div>
 

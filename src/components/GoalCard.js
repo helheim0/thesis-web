@@ -7,7 +7,7 @@ class AvailableGoalCard extends Component {
         return (
             <div style={styles.container}>
                 <div style={styles.card}>
-                        <h3 style={{fontSize:  20, marginRight: 30}}>{this.props.name}</h3>
+                        <h3 style={{fontSize:  20, marginRight: 30}}>{this.props.goal}</h3>
                         <IoArrowForwardOutline size={20} color={'#fff'}/>
                 </div>
             </div>

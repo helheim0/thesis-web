@@ -4,9 +4,9 @@ class GoalDetailCard extends React.Component {
     render() {
       return (
         <div>
-        <h1 style={styles.headerText}>{this.props.name}</h1>
+        <h1 style={styles.headerText}>{this.props.name}TITLE</h1>
         <h4 style={{fontStyle: 'italic'}}>x number of people have joined</h4>
-        <p style={styles.paragraph}>{this.props.desc}</p>
+        <p style={styles.paragraph}>{this.props.description}</p>
         <h1 style={styles.headerText}>Duration</h1>
         <p style={styles.paragraph}>{this.props.duration}</p>
         <h1 style={styles.headerText}>Reward</h1>

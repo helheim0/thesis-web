@@ -1,6 +1,9 @@
+// v9 compat packages are API compatible with v8 code
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
+import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -12,6 +15,9 @@ const firebaseConfig = {
   appId: "1:611805782342:web:dea4ca2e77b0cb9ed74547"
 };
 
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-export default firebase;
+const firebaseApp = firebase.initializeApp(firebaseConfig);
+
+export const auth = getAuth(firebaseApp);
+export const db = getFirestore(firebaseApp);
+
+export default firebaseApp;

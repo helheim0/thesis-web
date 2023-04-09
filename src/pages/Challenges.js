@@ -1,19 +1,28 @@
+import { Link } from 'react-router-dom';
 import ChallengesList from '../components/ChallengesList';
 import GoalDetailCard from '../components/GoalDetailCard';
 import '../styles.css';
+import ChallengeDetail from './ChallengeDetail';
 
 export default function Challenges() {
+    const hasChallenge = false;
 
     return (
         <div className="cont">
         <div style={styles.headerContainer}>
-            <h1 className='headerText'>Set your goal</h1>
-            <h3 style={styles.paragraph}>Pro tip: for consistence and better results, try focusing on one for now.</h3>
+            <h1 className='headerText'>Available challenges</h1>
+            {
+                !hasChallenge ? <div><h3>You have not joined any challenge yet.</h3><p style={styles.paragraph}>Browse the available challenges and join one today!</p></div> 
+                : <div>
+                    <h3>Your current challenge(s):</h3>
+                </div>
+            }
         </div>
        
        <div style={styles.listContainer}>
         <div style={styles.list}>
-        <ChallengesList name="veganuarz"/>
+            <Link to='/challengedetail' element={ChallengeDetail}>
+        <ChallengesList name="veganuarz"/></Link>
         <ChallengesList name="title"/>
         <ChallengesList name="title"/>
         <ChallengesList name="title"/>
@@ -48,7 +57,8 @@ const styles = {
         fontWeight: 400
     },
     headerContainer: {
-
+        textAlign: 'center',
+        paddingBottom: 20
     },
     listContainer: {
         display: 'block',

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { IoLockClosedOutline } from "react-icons/io5";
+import { IoFastFood } from "react-icons/io5";
 
 class StoreItem extends Component {
     
@@ -10,10 +11,8 @@ class StoreItem extends Component {
                     {
                         this.props.isLocked ? 
                         <IoLockClosedOutline size={60}/>
-                       :  <img
-                            style={{flex:1, width:null, height:null, resizeMode: 'cover'}}
-                            source={this.props.imageUri} alt="d"
-                          /> 
+                       :  
+                       <IoFastFood size={60}/>
                     }
                     
                 </div>

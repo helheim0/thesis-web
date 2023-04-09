@@ -1,11 +1,82 @@
+import React, { useState, useEffect } from "react";
 import StoreItem from '../components/StoreItem';
 import { IoLockClosed } from "react-icons/io5";
+import TextField from "@mui/material/TextField";
+import SearchBar from '../components/Searchbar';
+import { IoFlashOutline } from 'react-icons/io5';
+import { IoEllipseSharp } from 'react-icons/io5';
+import app from '../firebaseConfig';
+import { getFirestore, collection, query, where, onSnapshot } from "firebase/firestore";
+import {db} from '../firebaseConfig';
+import { doc, getDocs } from "firebase/firestore";
 
 export default function Track() {
 
+    const [food, setFood] = useState([]);
+
+    const fetchPost = async () => {
+       
+        await getDocs(collection(db, "food"))
+            .then((querySnapshot)=>{               
+                const newData = querySnapshot.docs
+                    .map((doc) => ({...doc.data(), id:doc.id }));
+                    setFood(newData);                
+                console.log(food, newData);
+            })
+       
+    }
+    useEffect(() => {
+        fetchPost();
+
+      }, []);
+
     return (
         <div className='cont'>
-            <div>track</div>
+            <div>
+                <div className='header'  style={styles.headerContainer}>
+                    <h1 className='headerText'>
+                        What did you eat today?
+                    </h1>
+                </div>
+                <div style={styles.searchContainer}>
+                <TextField
+                    id="outlined-basic"
+                    variant="outlined"
+                    fullWidth
+                    label="Search"
+                    />
+                    <div className='list' style={styles.list}>
+                        <ul>
+                        {
+                food?.map((f,i)=>(
+                    <div key={i} style={styles.listItem}>
+                        <IoEllipseSharp size={16} color="tomato"/>
+                        <li>{f.name}</li>
+                        {
+                        !f.isGood ? <p>-</p> : null
+                        }
+                        <p>{f.reward}</p>
+                        <IoFlashOutline size={20} color='tomato'/>
+                    </div>
+                    ))
+            }
+                        </ul>
+                    </div>
+                    <SearchBar />
+                    <div style={{display: 'flex', flexDirection:'row', alignItems: 'center', justifyContent:'center', padding: 6}}>
+                        <h3>
+                            Total energy saved:
+                        </h3>
+                        <h3 style={{paddingLeft: 6, paddingRight: 6}}>35</h3>
+                        <IoFlashOutline />
+                    </div>       
+                </div>
+                <div  style={styles.footer}>
+                    <p style={styles.paragraph}>
+                        Based on your daily food intake you managed to contribute to the mitigation of GHG. Good job!
+                    </p>
+                </div>
+        </div>
         </div>
     );
 }
@@ -27,5 +98,17 @@ const styles = {
         marginTop: 10,
         fontSize: 16,
     },
-
+    footer: {
+        backgroundColor: '#D9D9D9',
+        padding: 20,
+        textAlign: 'center'
+    },
+    listItem: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+        gap: 10,
+        fontSize: 18
+    }
 };

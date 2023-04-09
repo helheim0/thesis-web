@@ -14,15 +14,3 @@ export function getInitialData() {
   return currentData;
 }
 
-export function genNextData() {
-  const nextData = [...currentData];
-  const changes = random(0, 2);
-
-  for (let i = 0; i < changes; i++) {
-    const index = random(0, data.length - 1);
-    nextData[index].score = nextData[index].score + random(1000, 5000);
-  }
-
-  currentData = nextData.sort((a, b) => b.score - a.score).map(mapWithRank);
-  return currentData;
-}

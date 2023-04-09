@@ -18,6 +18,9 @@ import Login from './pages/Login';
 import { AuthProvider } from './Auth';
 import { HashRouter  as Router} from 'react-router-dom';
 import PrivateRoute from './PrivateRoute';
+import ChallengeDetail from './pages/ChallengeDetail';
+import GoalDetailCard from './components/GoalDetailCard';
+import GoalDetail from './pages/GoalDetail';
 
 const App = () => {
   return (
@@ -27,13 +30,15 @@ const App = () => {
           <PrivateRoute exact path="/" component={Home} />
           <Route exact path="/login" component={Login} />
           <Route exact path="/onboarding" component={Onboarding} /> 
-          <Route exact path="/challenges" component={Challenges} />
-          <Route exact path="/leaderboard" component={Leaderboard} />
-          <Route exact path="/store" component={Store} />
-          <Route exact path="/profile" component={Profile} />
-          <Route exact path="/setgoal" component={SetGoal} />
-          <Route exact path="/goallist" component={GoalList} />
-          <Route exact path="/track" component={Track} />
+          <PrivateRoute exact path="/challenges" component={Challenges} />
+          <PrivateRoute exact path="/leaderboard" component={Leaderboard} />
+          <PrivateRoute exact path="/store" component={Store} />
+          <PrivateRoute exact path="/profile" component={Profile} />
+          <PrivateRoute exact path="/setgoal" component={SetGoal} />
+          <PrivateRoute exact path="/goallist" component={GoalList} />
+          <PrivateRoute exact path="/track" component={Track} />
+          <PrivateRoute exact path="/challengedetail:id" component={ChallengeDetail} />
+          <PrivateRoute exact path="/goaldetail:id" component={GoalDetail} />
         </div>
       </Router>
     </AuthProvider>

@@ -1,12 +1,12 @@
-import ChallengesList from '../components/ChallengesList';
+
 import GoalDetailCard from '../components/GoalDetailCard';
 
-export default function ChallengeDetail(props) {
+export default function GoalDetail(props) {
+    const {name, description, duration} = props.goal;
 
-    const {name, description, duration, reward } = props.challenge;
     return (
         <div style={styles.container}>
-            <GoalDetailCard name={name} description={description} duration={duration} reward={reward}/>
+            <GoalDetailCard  name={name} description={description} duration={duration} />
         </div>
     );
 }
