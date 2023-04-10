@@ -19,8 +19,7 @@ export default function Home() {
     const date = new Date();
     const today = ". " +  date.getDate()  ;
     const month = date.getMonth() + 1;
-    const  [hasGoal, setHasGoal] = useState(false);
-    const [goal, setGoal] = useState("");
+    const [currentGoal, setCurrentGoal] = useState("");
     let user = firebase.auth().currentUser;
     var userEmail = user.email;
     let userName = userEmail.match(/^([^@]*)@/)[1];
@@ -37,26 +36,25 @@ export default function Home() {
     
           if (userData.hasOwnProperty("goal") && userData.goal !== "") {
             const goal = userData.goal;
-            setGoal(goal); //if goal exists and not empty set current goal
+            setCurrentGoal(goal); //if goal exists and not empty set current goal
           } else {
-            setGoal(""); //if goal not exists or empty set current goal as ""
+            setCurrentGoal(""); //if goal not exists or empty set current goal as ""
           }
         };
     
         fetchPost();
       }, []);
 
-
     return (
         <div >
             <button onClick={() => app.auth().signOut()}>Sign out</button>
             <h1> hello {userName}</h1>
             {
-                 goal.length > 0 ?  (<div><div style={container}>
+                 currentGoal.length > 0 ?  (<div><div style={container}>
                 <Currency />
             </div>
             <div style={{padding: '4rem', display: 'flex', flexDirection:'column', alignItems:'center', justifyContent:'space-evenly'}}>
-                <h1 className="headerText">Current goal: {goal}</h1>
+                <h1 className="headerText">Current goal: {currentGoal}</h1>
                 <div style={{ width: 200, height: 200, margin: '0 auto' }}>
                     {
                         hasTracked ?

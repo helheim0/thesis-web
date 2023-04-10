@@ -70,7 +70,7 @@ export default function Profile() {
                  <h1 className='headerText'>{userName}</h1>
                     <p style={styles.paragraph}>{userName}'s bio that can be edited later on.</p>
      </div>
-                <Currency currencyData="456"/>
+                <Currency />
             </div>
             
             <div>

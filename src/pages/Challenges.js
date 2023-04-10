@@ -1,11 +1,59 @@
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
 import ChallengesList from '../components/ChallengesList';
 import GoalDetailCard from '../components/GoalDetailCard';
 import '../styles.css';
 import ChallengeDetail from './ChallengeDetail';
+import app from '../firebaseConfig';
+import { getFirestore, collection, query, where, onSnapshot } from "firebase/firestore";
+import {db} from '../firebaseConfig';
+import { doc, getDocs } from "firebase/firestore";
+import { Link, Route, Switch } from "react-router-dom";
+import firebase from 'firebase/compat/app';
 
-export default function Challenges() {
-    const hasChallenge = false;
+const Challenges = props =>  {
+    const [hasChallenge, setHasChallenge] = useState('');
+    const [challenges, setChallenges] = useState([]);
+
+    const user = firebase.auth().currentUser;
+    const userId = user.uid;
+    var userEmail = user.email;
+    let userName = userEmail.match(/^([^@]*)@/)[1];
+
+    const fetchChallenges = async () => {
+       
+        await getDocs(collection(db, "challenges"))
+            .then((querySnapshot)=>{               
+                const newData = querySnapshot.docs
+                    .map((doc) => ({...doc.data(), id:doc.id }));
+                    setChallenges(newData);                
+                console.log(challenges, newData);
+            })
+       
+    }
+    useEffect(() => {
+        fetchChallenges();
+
+      }, []);
+
+      useEffect(() => {
+        const fetchPost = async () => {
+          
+          const q = query(collection(db, "users"), where("id", "==", userId));
+    
+          const querySnapshot = await getDocs(q);
+    
+          const userData = querySnapshot.docs[0]?.data(); //getting the only user data
+    
+          if (userData.hasOwnProperty("challenges") && userData.challenges !== "") {
+            const hasChallenge = userData.challenges;
+            setHasChallenge(true); //if goal exists and not empty set current goal
+          } else {
+            setHasChallenge(false); //if goal not exists or empty set current goal as ""
+          }
+        };
+    
+        fetchPost();
+      }, []);
 
     return (
         <div className="cont">
@@ -21,12 +69,20 @@ export default function Challenges() {
        
        <div style={styles.listContainer}>
         <div style={styles.list}>
-            <Link to='/challengedetail' element={ChallengeDetail}>
-        <ChallengesList name="veganuarz"/></Link>
-        <ChallengesList name="title"/>
-        <ChallengesList name="title"/>
-        <ChallengesList name="title"/>
-        <ChallengesList name="title"/>
+        {challenges.map(item => (
+          <div key={item.id}>
+            <Link 
+            to={{
+              pathname: `/challengedetail/${item.id}`,
+              state: { challenges: item } 
+            }}
+
+            params={{id: item.id, name: item.name, description: item.description}}
+            >
+            <ChallengesList name={item.name}/>
+            </Link>
+          </div>
+        ))}
         </div>
        </div>  
     </div>
@@ -69,3 +125,5 @@ const styles = {
     list: {
     }
   };
+
+  export default Challenges;

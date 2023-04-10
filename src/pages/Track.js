@@ -13,8 +13,15 @@ import { doc, getDocs } from "firebase/firestore";
 export default function Track() {
 
     const [food, setFood] = useState([]);
+    const [value, setValue] = useState("");
+    const [results, setResults] = useState([]);
+    const onSearch = (searchTerm) => {
+        setValue(searchTerm);
+        console.log("search",  searchTerm);
+    }
+    let energySaved = 0;
 
-    const fetchPost = async () => {
+    const loadBadges = async () => {
        
         await getDocs(collection(db, "food"))
             .then((querySnapshot)=>{               
@@ -26,10 +33,9 @@ export default function Track() {
        
     }
     useEffect(() => {
-        fetchPost();
+      loadBadges();
 
       }, []);
-
     return (
         <div className='cont'>
             <div>
@@ -39,35 +45,48 @@ export default function Track() {
                     </h1>
                 </div>
                 <div style={styles.searchContainer}>
-                <TextField
+                    <input type="text" 
+                    value={value}  onChange={(event) => {
+                        setValue(event.target.value);
+                    }} />
+               {/* <TextField
                     id="outlined-basic"
                     variant="outlined"
                     fullWidth
                     label="Search"
-                    />
+                    
+                    /> */}
                     <div className='list' style={styles.list}>
                         <ul>
-                        {
-                food?.map((f,i)=>(
-                    <div key={i} style={styles.listItem}>
-                        <IoEllipseSharp size={16} color="tomato"/>
-                        <li>{f.name}</li>
-                        {
-                        !f.isGood ? <p>-</p> : null
-                        }
-                        <p>{f.reward}</p>
-                        <IoFlashOutline size={20} color='tomato'/>
-                    </div>
-                    ))
-            }
+                            {
+                                food.filter(item => {
+                                    const searchTerm = value.toString().toLowerCase();
+                                    const name = item.name.toString().toLowerCase();
+
+                                    return (searchTerm && name.startsWith(searchTerm) && name !== searchTerm);
+                                }).slice(0, 15).map((item, i) => (
+                                    <div key={i} style={styles.listItem} >
+                                        <IoEllipseSharp size={16} color="tomato"/>
+                                        <li>{item.name}</li>
+                                        {
+                                        !item.isGood ? <p>-</p> : null
+                                        }
+                                        <p>{item.reward}</p>
+                                        <IoFlashOutline size={20} color='tomato'/>
+                                    </div>
+                                    ))
+                            }
                         </ul>
                     </div>
-                    <SearchBar />
+                   {/* <SearchBar onChange={(event) => {
+                        setValue(event.target.value);
+                    }} 
+                    value={value}/>*/}
                     <div style={{display: 'flex', flexDirection:'row', alignItems: 'center', justifyContent:'center', padding: 6}}>
                         <h3>
                             Total energy saved:
                         </h3>
-                        <h3 style={{paddingLeft: 6, paddingRight: 6}}>35</h3>
+                        <h3 style={{paddingLeft: 6, paddingRight: 6}}>{energySaved}</h3>
                         <IoFlashOutline />
                     </div>       
                 </div>

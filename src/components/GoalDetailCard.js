@@ -1,11 +1,20 @@
 import React, { Component } from 'react'
+import app from '../firebaseConfig';
+import { getFirestore, collection, query, where, onSnapshot, Timestamp } from "firebase/firestore";
+import {db} from '../firebaseConfig';
+import { doc, getDocs, addDoc } from "firebase/firestore";
+import { Link, Route, Switch, useLocation } from "react-router-dom";
+import firebase from 'firebase/compat/app';
 
 class GoalDetailCard extends React.Component {
+    
+
+      
     render() {
       return (
         <div>
-        <h1 style={styles.headerText}>{this.props.name}TITLE</h1>
-        <h4 style={{fontStyle: 'italic'}}>x number of people have joined</h4>
+        <h1 style={styles.headerText}>{this.props.name}</h1>
+       {/* <h4 style={{fontStyle: 'italic'}}>x number of people have joined</h4> */}
         <p style={styles.paragraph}>{this.props.description}</p>
         <h1 style={styles.headerText}>Duration</h1>
         <p style={styles.paragraph}>{this.props.duration}</p>
@@ -13,9 +22,6 @@ class GoalDetailCard extends React.Component {
         <div style={{flexDirection: 'row'}}>
             <p style={styles.paragraph}>{this.props.reward}</p>
         </div>
-        <button style={styles.buttonContainer}> 
-            <h1 style={styles.buttonText}>Join challenge!</h1>
-        </button>
     </div>
      );
     }

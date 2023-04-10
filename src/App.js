@@ -37,8 +37,8 @@ const App = () => {
           <PrivateRoute exact path="/setgoal" component={SetGoal} />
           <PrivateRoute exact path="/goallist" component={GoalList} />
           <PrivateRoute exact path="/track" component={Track} />
-          <PrivateRoute exact path="/challengedetail:id" component={ChallengeDetail} />
-          <PrivateRoute exact path="/goaldetail:id" component={GoalDetail} />
+          <PrivateRoute exact path="/challengedetail/:id" component={ChallengeDetail} />
+          <Route exact path="/goaldetail/:id" component={GoalDetail} />
         </div>
       </Router>
     </AuthProvider>

@@ -6,6 +6,7 @@ import firebase from 'firebase/compat/app';
 import { collection, query, where, onSnapshot } from "firebase/firestore";
 import {db} from '../firebaseConfig';
 import { doc, getDocs, getFirestore  } from "firebase/firestore";
+import Currency from "../components/Currency";
 
 export default function Store() {
     let user = firebase.auth().currentUser;
@@ -36,6 +37,7 @@ export default function Store() {
     return (
         <div className='cont'>
             <div >
+                <Currency />
                 <h1 className='headerText'>Recipes</h1>
                 <div >
                     <div style={styles.recipesContainer}>  

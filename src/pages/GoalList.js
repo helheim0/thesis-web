@@ -10,7 +10,7 @@ import { doc, getDocs } from "firebase/firestore";
 import { Link, Route, Switch } from "react-router-dom";
 import GoalDetail from "./GoalDetail";
 
-export default function GoalList(props) {
+const GoalList = props => {
 
     const [input, setInput] = useState('');
     const [goals, setGoals] = useState([]);
@@ -40,13 +40,20 @@ export default function GoalList(props) {
        
        <div style={styles.listContainer}>
         <div style={styles.list}> 
-        {
-        goals?.map((goal,i)=>(
-            <div>
-            <Link to={`/goallist/${goal.id}`} params={ goal.name} key={i}><ChallengesList key={i} name={goal.name} goal={goal}/></Link>
-            </div>
-        ))
-        }
+        {goals.map(item => (
+          <div key={item.id}>
+            <Link 
+            to={{
+              pathname: `/goaldetail/${item.id}`,
+              state: { goals: item } 
+            }}
+
+            params={{id: item.id, name: item.name, description: item.description}}
+            >
+            <ChallengesList name={item.name}/>
+            </Link>
+          </div>
+        ))}
         </div>
        </div> 
        <Switch>
@@ -92,3 +99,5 @@ const styles = {
     list: {
     }
 };
+
+export default GoalList;

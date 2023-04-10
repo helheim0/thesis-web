@@ -36,16 +36,16 @@ export default function Leaderboard() {
         <div style={styles.container}>
             <div style={{display: 'flex', flexDirection:'column', alignItems: 'center', justifyContent: 'space-between'}}>
               <h1 className='headerText' style={{paddingTop: 20, paddingBottom: 20}}>Novice league</h1>
-              {
+              <ol style={{fontSize: 20, fontWeight: 'bold', paddingt: 20}}>{
               users.sort((a, b) => a.score < b.score ? 1:-1).map((user,i)=>(
-                
-              <div key={i} style={{display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 30}}>
+                <li >      
+              <div key={i} style={{display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end', gap: 30}}>
                 <IoPersonSharp size={40} color="tomato" />
                 <p style={{fontSize: 20, fontWeight: 'bold'}}>{user.name}</p>
-                <p style={{marginLeft: 40}}>{user.score}</p>
-              </div>
+                <p style={{marginLeft: 40}}>{user.score}</p>    
+              </div></li> 
             ))
-            }
+            }</ol>
             </div>
         </div>
     );
