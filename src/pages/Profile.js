@@ -10,14 +10,16 @@ import { doc, getDocs, getFirestore, documentId  } from "firebase/firestore";
 import firebase from 'firebase/compat/app';
 import React, { useState, useEffect } from "react";
 import { firestore } from 'firebase/app';
-
+import { useStreak } from 'use-streak';
 export default function Profile() {
     //let user = firebase.auth().currentUser;
     //var userEmail = user.email;
     //let userName = userEmail.match(/^([^@]*)@/)[1];
     //let userId = user.id;
     const [currentGoal, setCurrentGoal] = useState("");
-   
+   const today = new Date();
+   const {currentCount} = useStreak(localStorage, today);
+
     const user = firebase.auth().currentUser;
     const userId = user.uid;
     var userEmail = user.email;
@@ -76,7 +78,7 @@ export default function Profile() {
             <div>
                 <div style={{ display: 'flex', flexDirection:'row', justifyContent: 'space-between'}}>
                     <h1 className='headerText'>Progress</h1>
-                    <h1 className='headerText'>15 day streak</h1>
+                    <h1 className='headerText'>{currentCount} day streak</h1>
                 </div>
                 <div style={{height: 20, backgroundColor:'#333'}}></div>
             </div>
@@ -85,7 +87,7 @@ export default function Profile() {
             <div>
                 <h1 className='headerText'>Current goal</h1>
                 {
-                        currentGoal.length > 0 ?  <h2>
+                       currentGoal && currentGoal.length > 0 ?  <h2>
                       {currentGoal}
                       </h2>
                       :

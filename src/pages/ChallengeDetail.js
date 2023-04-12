@@ -3,30 +3,63 @@ import ChallengesList from '../components/ChallengesList';
 import GoalDetailCard from '../components/GoalDetailCard';
 import { useParams } from "react-router-dom";
 import app from '../firebaseConfig';
-import { getFirestore, collection, query, where, onSnapshot, Timestamp } from "firebase/firestore";
+import { getFirestore, collection, query, where, onSnapshot, Timestamp, updateDoc } from "firebase/firestore";
 import {db} from '../firebaseConfig';
 import { doc, getDocs, addDoc } from "firebase/firestore";
 import { Link, Route, Switch, useLocation } from "react-router-dom";
 import firebase from 'firebase/compat/app';
+import ChallengeDetailCard from "../components/ChallengeDetailCard";
 
-const ChallengeDetail = async (event) => {
+const ChallengeDetail = (event) => {
     let { id } = useParams();
-    const [challenges, setChallenges] = useState(null);
+    const [challenges, setChallenges] = useState("");
     const { state } = useLocation();
     const user = firebase.auth().currentUser;
     const userId = user.uid;
     var userEmail = user.email;
     let userName = userEmail.match(/^([^@]*)@/)[1];
-    event.preventDefault();
 
-    await addDoc(collection(db, "users"),where("id", "==", userId), {
-        challenges: challenges,
-        createdAt: Timestamp
-    });
+    useEffect(() => {
+        const fetchPost = async () => {
+          
+          const q = query(collection(db, "users"), where("id", "==", userId));
+    
+          const querySnapshot = await getDocs(q);
+    
+          const userData = querySnapshot.docs[0]?.data(); //getting the only user data
+    
+          if (userData.hasOwnProperty("challenges") && userData.challenges !== "") {
+            const hasChallenge = userData.challenges;
+            console.log("inside if statement");
+            setChallenges(hasChallenge);//if goal exists and not empty set current goal
+          } else {
+            setChallenges(""); //if goal not exists or empty set current goal as ""
+          }
+        };
+    
+        fetchPost();
+      }, []);
 
+    function handleUpdate(e){
+        e.preventDefault();
+        const ref = doc(db, "users", userId);
+        updateDoc(ref, {
+            challenges: state.challenges.name
+        }).then(reponse => {
+            alert("updated");
+        }).catch(error => {
+            console.log(error.message);
+        })
+    }
     return (
         <div style={styles.container}>
-            <GoalDetailCard  name={state.challenges.name} description={state.challenges.description} duration={state.challenges.duration} reward={state.challenges.reward}/>
+            <ChallengeDetailCard  name={state.challenges.name} description={state.challenges.description} duration={state.challenges.duration} reward={state.challenges.reward}/>
+        {
+             challenges && challenges.length > 0 ? null : <button style={styles.buttonContainer} onClick={handleUpdate}> 
+             <h1 style={styles.buttonText}>Join challenge!</h1>
+         </button>
+        }
+        
         </div>
     );
 }

@@ -13,6 +13,7 @@ import firebase from 'firebase/compat/app';
 const Challenges = props =>  {
     const [hasChallenge, setHasChallenge] = useState('');
     const [challenges, setChallenges] = useState([]);
+    const [currentChallenge, setCurrentChallenge] = useState("");
 
     const user = firebase.auth().currentUser;
     const userId = user.uid;
@@ -46,9 +47,10 @@ const Challenges = props =>  {
     
           if (userData.hasOwnProperty("challenges") && userData.challenges !== "") {
             const hasChallenge = userData.challenges;
-            setHasChallenge(true); //if goal exists and not empty set current goal
+            console.log("inside if statement");
+            setCurrentChallenge(hasChallenge);//if goal exists and not empty set current goal
           } else {
-            setHasChallenge(false); //if goal not exists or empty set current goal as ""
+            setCurrentChallenge(hasChallenge); //if goal not exists or empty set current goal as ""
           }
         };
     
@@ -58,33 +60,53 @@ const Challenges = props =>  {
     return (
         <div className="cont">
         <div style={styles.headerContainer}>
-            <h1 className='headerText'>Available challenges</h1>
+            <h1 className='headerText'>Challenges</h1>
+            <p></p>
             {
-                !hasChallenge ? <div><h3>You have not joined any challenge yet.</h3><p style={styles.paragraph}>Browse the available challenges and join one today!</p></div> 
-                : <div>
-                    <h3>Your current challenge(s):</h3>
-                </div>
+                currentChallenge && currentChallenge.length > 0 ? <div>
+                <h3>Your current challenge(s):</h3>
+                <div style={styles.listContainer}>
+        <div style={styles.list}>
+                    <div key={currentChallenge.id}>
+                      <Link 
+                      to={{
+                        pathname: `/challengedetail/${currentChallenge}`,
+                        state: { challenges: currentChallenge } 
+                      }}
+
+                      params={{id: currentChallenge.id, name: currentChallenge.name, description: currentChallenge.description}}
+                      >
+                      <ChallengesList name={currentChallenge}/>
+                      </Link>
+                    </div>
+                    </div>
+                    </div>
+            </div>
+                :
+                <div><h3>You have not joined any challenge yet.</h3><p style={styles.paragraph}>Browse the available challenges and join one today!</p> 
+                <h1 style={styles.header}>Available challenges</h1>
+                <div style={styles.listContainer}>
+                 <div style={styles.list}>
+                 {challenges.map(item => (
+                   <div key={item.id}>
+                     <Link 
+                     to={{
+                       pathname: `/challengedetail/${item.id}`,
+                       state: { challenges: item } 
+                     }}
+         
+                     params={{id: item.id, name: item.name, description: item.description}}
+                     >
+                     <ChallengesList name={item.name}/>
+                     </Link>
+                   </div>
+                 ))}
+                 </div>
+                </div> </div>
             }
         </div>
        
-       <div style={styles.listContainer}>
-        <div style={styles.list}>
-        {challenges.map(item => (
-          <div key={item.id}>
-            <Link 
-            to={{
-              pathname: `/challengedetail/${item.id}`,
-              state: { challenges: item } 
-            }}
-
-            params={{id: item.id, name: item.name, description: item.description}}
-            >
-            <ChallengesList name={item.name}/>
-            </Link>
-          </div>
-        ))}
-        </div>
-       </div>  
+ 
     </div>
     );
 }
@@ -105,6 +127,7 @@ const styles = {
         fontSize: 24,
         fontWeight: 'bold',
         color: '#ED904C',
+        textAlign: 'center'
     },
     paragraph: {
         marginTop: 10,

@@ -23,13 +23,13 @@ export default function Home() {
     let user = firebase.auth().currentUser;
     var userEmail = user.email;
     let userName = userEmail.match(/^([^@]*)@/)[1];
-    let userId = user.id;
+    let userId = user.uid;
 
     useEffect(() => {
         const fetchPost = async () => {
           
           const q = query(collection(db, "users"), where("id", "==", userId));
-    
+
           const querySnapshot = await getDocs(q);
     
           const userData = querySnapshot.docs[0]?.data(); //getting the only user data
@@ -50,7 +50,7 @@ export default function Home() {
             <button onClick={() => app.auth().signOut()}>Sign out</button>
             <h1> hello {userName}</h1>
             {
-                 currentGoal.length > 0 ?  (<div><div style={container}>
+                currentGoal && currentGoal.length > 0 ?  (<div><div style={container}>
                 <Currency />
             </div>
             <div style={{padding: '4rem', display: 'flex', flexDirection:'column', alignItems:'center', justifyContent:'space-evenly'}}>

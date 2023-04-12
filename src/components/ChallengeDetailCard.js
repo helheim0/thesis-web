@@ -6,7 +6,7 @@ import { doc, getDocs, addDoc } from "firebase/firestore";
 import { Link, Route, Switch, useLocation } from "react-router-dom";
 import firebase from 'firebase/compat/app';
 
-class GoalDetailCard extends React.Component {
+class ChallengeDetailCard extends React.Component {
     render() {
       return (
         <div>
@@ -60,4 +60,4 @@ class GoalDetailCard extends React.Component {
     }
 };
 
-export default GoalDetailCard;
+export default ChallengeDetailCard;
