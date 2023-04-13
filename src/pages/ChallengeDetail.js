@@ -40,6 +40,7 @@ const ChallengeDetail = (event) => {
         fetchPost();
       }, []);
 
+      
     function handleUpdate(e){
         e.preventDefault();
         const ref = doc(db, "users", userId);

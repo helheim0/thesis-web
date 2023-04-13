@@ -57,6 +57,7 @@ const Challenges = props =>  {
         fetchPost();
       }, []);
 
+      
     return (
         <div className="cont">
         <div style={styles.headerContainer}>

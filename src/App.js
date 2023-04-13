@@ -21,6 +21,7 @@ import PrivateRoute from './PrivateRoute';
 import ChallengeDetail from './pages/ChallengeDetail';
 import GoalDetailCard from './components/GoalDetailCard';
 import GoalDetail from './pages/GoalDetail';
+import RecipeCard from './components/RecipeCard';
 
 const App = () => {
   return (
@@ -39,6 +40,7 @@ const App = () => {
           <PrivateRoute exact path="/track" component={Track} />
           <PrivateRoute exact path="/challengedetail/:id" component={ChallengeDetail} />
           <Route exact path="/goaldetail/:id" component={GoalDetail} />
+          <PrivateRoute exact path="/recipes/:id" component={RecipeCard} />
         </div>
       </Router>
     </AuthProvider>

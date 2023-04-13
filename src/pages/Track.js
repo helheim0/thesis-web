@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import StoreItem from '../components/StoreItem';
 import { IoLockClosed } from "react-icons/io5";
 import TextField from "@mui/material/TextField";
@@ -6,20 +6,28 @@ import SearchBar from '../components/Searchbar';
 import { IoFlashOutline } from 'react-icons/io5';
 import { IoEllipseSharp } from 'react-icons/io5';
 import app from '../firebaseConfig';
-import { getFirestore, collection, query, where, onSnapshot } from "firebase/firestore";
+import { getFirestore, collection, query, where, onSnapshot, addDoc, serverTimestamp  } from "firebase/firestore";
 import {db} from '../firebaseConfig';
 import { doc, getDocs } from "firebase/firestore";
+import firebase from 'firebase/compat/app';
+import { Link } from "react-router-dom";
 
 export default function Track() {
 
     const [food, setFood] = useState([]);
     const [value, setValue] = useState("");
     const [results, setResults] = useState([]);
+    const [tracked, setTracked] = useState(false);
+    let user = firebase.auth().currentUser;
+    var userEmail = user.email;
+    let userName = userEmail.match(/^([^@]*)@/)[1];
+    let userId = user.uid;
+
     const onSearch = (searchTerm) => {
         setValue(searchTerm);
         console.log("search",  searchTerm);
     }
-    let energySaved = 0;
+    const [energySaved, setEnergySaved] = useState("");
 
     const loadBadges = async () => {
        
@@ -36,6 +44,24 @@ export default function Track() {
       loadBadges();
 
       }, []);
+        const setValueFunc = (item) => {
+            item.isGood ? setEnergySaved((energySaved) => +energySaved + +item.reward) : setEnergySaved((energySaved) => +energySaved - +item.reward)
+         
+       }
+      
+    const handleTrackFood = useCallback(item => {
+        
+        const items = [
+          {
+            id: item.id,
+            name: item.name,
+            reward: item.reward
+          },
+          ...results,
+        ]
+      setResults(items);
+    }, [results]);
+
     return (
         <div className='cont'>
             <div>
@@ -67,7 +93,18 @@ export default function Track() {
                                 }).slice(0, 15).map((item, i) => (
                                     <div key={i} style={styles.listItem} >
                                         <IoEllipseSharp size={16} color="tomato"/>
-                                        <li>{item.name}</li>
+                                        <li onClick={() => {
+                                            const generalRef = collection(db, `users/${userId}/track`);
+                                            const general =  addDoc(generalRef, {
+                                                data: item,
+                                                date: serverTimestamp()
+                                            });
+                                            setValueFunc(item);
+                                            console.log('clicked: ' + item.name);
+                                            setResults(item.name);
+                                            console.log("energy saved: " + energySaved);
+                                            handleTrackFood(item);
+                                        }}>{item.name}</li>
                                         {
                                         !item.isGood ? <p>-</p> : null
                                         }
@@ -78,10 +115,33 @@ export default function Track() {
                             }
                         </ul>
                     </div>
-                   {/* <SearchBar onChange={(event) => {
-                        setValue(event.target.value);
-                    }} 
-                    value={value}/>*/}
+                    
+                    <div style={{display: 'flex', flexDirection:'column', alignItems: 'center', justifyContent:'center', padding: 6}}>
+                        <hr />
+                        {
+                            results?.map((item, i) => (
+                                <div key={i} style={styles.listItem} >
+                                <IoEllipseSharp size={16} color="tomato"/>
+                                <li>{item.name}</li>
+                                {
+                                !item.isGood ? <p>-</p> : null
+                                }
+                                <p>{item.reward}</p>
+                                <IoFlashOutline size={20} color='tomato'/>
+
+                            </div>
+                            ))
+                        }
+                        <hr />
+                        
+                         <Link to={{
+                        pathname: `/`,
+                        state: {tracked}
+                    }} onClick={() =>{
+                            alert("data set");
+                            setTracked(true);
+                        }}  > Send </Link>
+                    </div>  
                     <div style={{display: 'flex', flexDirection:'row', alignItems: 'center', justifyContent:'center', padding: 6}}>
                         <h3>
                             Total energy saved:

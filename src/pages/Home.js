@@ -4,7 +4,7 @@ import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import { CircularProgressbarWithChildren } from 'react-circular-progressbar';
 import "../styles.css";
-import {   BrowserRouter, Routes } from "react-router-dom";
+import {   BrowserRouter, Routes, useParams, useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
 import Track from "./Track";
 import app from '../firebaseConfig';
@@ -14,16 +14,20 @@ import {db} from '../firebaseConfig';
 import { doc, getDocs, getFirestore  } from "firebase/firestore";
 import firebase from 'firebase/compat/app';
 
-export default function Home() { 
+const Home = (event) => { 
     const hasTracked = false;
     const date = new Date();
     const today = ". " +  date.getDate()  ;
     const month = date.getMonth() + 1;
     const [currentGoal, setCurrentGoal] = useState("");
+    const [tracked, setTracked] = useState(false);
     let user = firebase.auth().currentUser;
     var userEmail = user.email;
     let userName = userEmail.match(/^([^@]*)@/)[1];
     let userId = user.uid;
+    
+    /*const location = useLocation()
+    const { hasTracked} = location.state*/
 
     useEffect(() => {
         const fetchPost = async () => {
@@ -46,9 +50,7 @@ export default function Home() {
       }, []);
 
     return (
-        <div >
-            <button onClick={() => app.auth().signOut()}>Sign out</button>
-            <h1> hello {userName}</h1>
+        <div>
             {
                 currentGoal && currentGoal.length > 0 ?  (<div><div style={container}>
                 <Currency />
@@ -177,3 +179,5 @@ const styles = {
         flex: 2
     }
   };
+
+  export default Home;
