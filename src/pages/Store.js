@@ -22,27 +22,7 @@ const Store = props =>  {
     const [recipes, setRecipes] = useState([]);
     const [recipeCost, setRecipeCost] = useState("");
 
-    useEffect(() => {
-        const fetchPost = async () => {
-          
-          const q = query(collection(db, "users"), where("id", "==", userId));
-    
-          const querySnapshot = await getDocs(q);
-    
-          const userData = querySnapshot.docs[0]?.data(); //getting the only user data
-    
-          if (userData.hasOwnProperty("currency")) {
-            const curr = userData.currency;
-            console.log("userdata currency: " + curr);
-            setCurrency(userData.currency); //if goal exists and not empty set current goal
-            console.log("set currency: " + currency);
-          } else {
-            setCurrency(""); //if goal not exists or empty set current goal as ""
-          }
-        };
-    
-        fetchPost();
-      }, []);
+
     const fetchPost = async () => {
        
         await getDocs(collection(db, "recipes"))
@@ -103,7 +83,27 @@ const Store = props =>  {
         }
         
     }
+    useEffect(() => {
+        const fetchPost = async () => {
+          
+          const q = query(collection(db, "users"), where("id", "==", userId));
     
+          const querySnapshot = await getDocs(q);
+    
+          const userData = querySnapshot.docs[0]?.data(); //getting the only user data
+    
+          if (userData.hasOwnProperty("currency")) {
+            const curr = userData.currency;
+            console.log("userdata currency: " + curr);
+            setCurrency(userData.currency); //if goal exists and not empty set current goal
+            console.log("set currency: " + currency);
+          } else {
+            setCurrency(""); //if goal not exists or empty set current goal as ""
+          }
+        };
+    
+        fetchPost();
+      }, []);
     return (
         <div className='cont'>
             <div >

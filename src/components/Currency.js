@@ -11,7 +11,7 @@ class Currency extends Component {
         currency: []
     }
 
-    fetchCurrency = () => {
+    fetchCurrency = async() => {
         const user = firebase.auth().currentUser;
         const userId = user.uid;
         const q = query(collection(db, "users"), where("id", "==", userId)); 

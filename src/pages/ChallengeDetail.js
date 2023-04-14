@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 import app from '../firebaseConfig';
 import { getFirestore, collection, query, where, onSnapshot, Timestamp, updateDoc } from "firebase/firestore";
 import {db} from '../firebaseConfig';
-import { doc, getDocs, addDoc } from "firebase/firestore";
+import { doc, getDocs, addDoc, setDoc } from "firebase/firestore";
 import { Link, Route, Switch, useLocation } from "react-router-dom";
 import firebase from 'firebase/compat/app';
 import ChallengeDetailCard from "../components/ChallengeDetailCard";
@@ -44,8 +44,20 @@ const ChallengeDetail = (event) => {
     function handleUpdate(e){
         e.preventDefault();
         const ref = doc(db, "users", userId);
+        const challengeRef = doc(db, "userChallenges", userId);
         updateDoc(ref, {
             challenges: state.challenges.name
+        }).then(reponse => {
+            alert("updated");
+        }).catch(error => {
+            console.log(error.message);
+        })
+
+        setDoc(challengeRef, {
+            id: userId,
+            name: state.challenges.name,
+            duration: state.challenges.duration,
+            reward: state.challenges.reward
         }).then(reponse => {
             alert("updated");
         }).catch(error => {

@@ -11,9 +11,11 @@ class ChallengeDetailCard extends React.Component {
       return (
         <div>
         <h1 style={styles.headerText}>{this.props.name}</h1>
+        {console.log("name: " + this.props.name)}
        {/* <h4 style={{fontStyle: 'italic'}}>x number of people have joined</h4> */}
         <p style={styles.paragraph}>{this.props.description}</p>
         <h1 style={styles.headerText}>Duration</h1>
+        {console.log("duration: " + this.props.duration)}
         <p style={styles.paragraph}>{this.props.duration}</p>
         <h1 style={styles.headerText}>Reward</h1>
         <div style={{flexDirection: 'row'}}>
